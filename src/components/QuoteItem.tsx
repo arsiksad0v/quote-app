@@ -1,32 +1,35 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { database } from '../firebase';
+import { useNavigate } from 'react-router-dom';
+import { database } from '../firebaseConfig';
 import { ref, remove } from 'firebase/database';
-
-interface Quote {
-  id: string;
-  author: string;
-  text: string;
-  category: string;
-}
+import '../styles/QuoteItem.css';
 
 interface QuoteItemProps {
-  quote: Quote;
+  quote: { id: string; author: string; category: string; text: string };
 }
 
 const QuoteItem: React.FC<QuoteItemProps> = ({ quote }) => {
-  const deleteQuote = () => {
-    remove(ref(database, `quotes/${quote.id}`));
+  const navigate = useNavigate();
+
+  const handleDelete = () => {
+    const quoteRef = ref(database, `quotes/${quote.id}`);
+    remove(quoteRef);
+  };
+
+  const handleEdit = () => {
+    navigate(`/edit/${quote.id}`);
   };
 
   return (
-    <div>
+    <li>
       <p>{quote.text}</p>
-      <p><strong>- {quote.author}</strong></p>
-      <Link to={`/edit/${quote.id}`}>Edit</Link>
-      <button onClick={deleteQuote}>Delete</button>
-    </div>
+      <p>{quote.author}</p>
+      <p>{quote.category}</p>
+      <button onClick={handleEdit}>Редактировать</button>
+      <button onClick={handleDelete}>Удалить</button>
+    </li>
   );
 }
 
 export default QuoteItem;
+

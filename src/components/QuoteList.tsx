@@ -1,24 +1,17 @@
 import React from 'react';
 import QuoteItem from './QuoteItem';
 
-interface Quote {
-  id: string;
-  author: string;
-  text: string;
-  category: string;
-}
-
 interface QuoteListProps {
-  quotes: Quote[];
+  quotes: { id: string; author: string; category: string; text: string }[];
 }
 
 const QuoteList: React.FC<QuoteListProps> = ({ quotes }) => {
   return (
-    <div>
+    <ul>
       {quotes.map(quote => (
         <QuoteItem key={quote.id} quote={quote} />
       ))}
-    </div>
+    </ul>
   );
 }
 
