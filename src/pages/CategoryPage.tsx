@@ -16,19 +16,21 @@ interface CategoryParams {
 }
 
 const CategoryPage: React.FC = () => {
-  const { id } = useParams<CategoryParams>();
+  const { id } = useParams<{ id: string }>();
   const [quotes, setQuotes] = useState<Quote[]>([]);
 
   useEffect(() => {
-    const quotesRef = query(ref(database, 'quotes'), orderByChild('category'), equalTo(id));
-    onValue(quotesRef, (snapshot) => {
-      const quotesData = snapshot.val();
-      const quotesList = [];
-      for (let quoteId in quotesData) {
-        quotesList.push({ id: quoteId, ...quotesData[quoteId] });
-      }
-      setQuotes(quotesList);
-    });
+    if (id) {
+      const quotesRef = query(ref(database, 'quotes'), orderByChild('category'), equalTo(id));
+      onValue(quotesRef, (snapshot) => {
+        const quotesData = snapshot.val();
+        const quotesList: Quote[] = [];
+        for (let quoteId in quotesData) {
+          quotesList.push({ id: quoteId, ...quotesData[quoteId] });
+        }
+        setQuotes(quotesList);
+      });
+    }
   }, [id]);
 
   return (
