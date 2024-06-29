@@ -16,7 +16,7 @@ interface CategoryParams {
 }
 
 const CategoryPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>(); // Убедитесь, что типизация здесь корректна
   const [quotes, setQuotes] = useState<Quote[]>([]);
 
   useEffect(() => {
